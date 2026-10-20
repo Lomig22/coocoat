@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coocoat™ Heated Shawl – Wearable Warmth, No Wall Outlet</title>
+<meta name="description" content="Coocoat is a soft heated waffle-knit shawl powered by any USB power bank. Free tracked delivery and a 30-day money-back guarantee.">
+<link rel="icon" href="favicon/favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon/apple-touch-icon.png">
+<link rel="manifest" href="favicon/site.webmanifest">
+<meta name="theme-color" content="#7b2d2e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,0..100&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+  :root{
+    --brown:#4a2418; --brown-2:#6b3a26; --burgundy:#7b2d2e; --cream:#faf6f1; --cream-2:#fcf6ed; --sand:#f1e7dc; --line:#e6d9cc;
+    --ink:#2b1d16; --muted:#7a6558; --sale:#c2410c; --sale-2:#9a3412; --hot:#e8590c; --star:#f5b301; --ok:#256a3d;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none!important}
+  html{scroll-behavior:smooth}
+  body{font-family:"DM Sans",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img,video{display:block;max-width:100%;height:auto}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:600;font-variation-settings:"SOFT" 100;color:var(--brown);line-height:1.15}
+  a{color:inherit}
+  a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  .sale-over .js-sale{display:none!important}
+
+  /* ---------- Announcement marquee ---------- */
+  .bar{background:var(--brown);color:#fff;font-size:13px;font-weight:500;letter-spacing:.04em;overflow:hidden;white-space:nowrap}
+  .bar__track{display:inline-flex;padding:9px 0;animation:marquee 40s linear infinite}
+  .bar:hover .bar__track,.bar:focus-within .bar__track{animation-play-state:paused}
+  .bar__group{display:inline-flex}
+  .bar__item{padding:0 28px;position:relative}
+  .bar__item::after{content:"✦";position:absolute;right:-5px;opacity:.5}
+  .bar b{color:#ffd8a8}
+  .js-countdown{font-variant-numeric:tabular-nums;background:rgba(255,255,255,.14);padding:1px 7px;border-radius:6px;margin-left:4px}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  header{background:var(--cream-2);border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;justify-content:center;padding-top:12px;padding-bottom:12px}
+  header img{height:54px;width:auto}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:32px 0 56px}
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:start}
+  .gallery{position:sticky;top:20px}
+  .gallery__main{aspect-ratio:1;background:#fff;border-radius:var(--radius);overflow:hidden;position:relative}
+  .gallery__main img{width:100%;height:100%;object-fit:cover;transition:opacity .25s}
+  .gallery__badge{position:absolute;top:14px;left:14px;background:var(--sale);color:#fff;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;animation:wobble 4s ease-in-out infinite}
+  @keyframes wobble{0%,82%,100%{transform:rotate(0)}86%{transform:rotate(-7deg) scale(1.06)}90%{transform:rotate(6deg) scale(1.06)}94%{transform:rotate(-3deg)}}
+  .thumbs{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:10px}
+  .thumbs button{border:2px solid transparent;border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;padding:0;aspect-ratio:1}
+  .thumbs button[aria-current="true"]{border-color:var(--brown)}
+  .thumbs img{width:100%;height:100%;object-fit:cover}
+
+  .proof{display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:14px}
+  .avatars{display:flex}
+  .avatars img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--cream);margin-left:-8px}
+  .avatars img:first-child{margin-left:0}
+  .proof b{color:var(--brown)}
+  .live{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:live 1.6s infinite}
+  @keyframes live{70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+  .info h1{font-size:clamp(30px,4vw,42px);margin:0 0 8px}
+  .rating{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+  .stars{color:var(--star);letter-spacing:2px;font-size:16px}
+  .price{display:flex;align-items:center;gap:12px;margin:18px 0 20px;flex-wrap:wrap}
+  .price__now{font-size:30px;font-weight:700;color:var(--brown)}
+  .price__was{font-size:18px;color:var(--muted);text-decoration:line-through}
+  .price__save{background:var(--sale);color:#fff;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;letter-spacing:.04em}
+
+  /* ---------- Animated perks ---------- */
+  .perks{list-style:none;display:grid;gap:10px;margin-bottom:24px}
+  .perks li{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;font-size:15px;transition:transform .2s,box-shadow .2s}
+  .perks li:hover{transform:translateX(4px);box-shadow:0 6px 18px rgba(74,36,24,.08)}
+  .perks b{color:var(--brown)}
+  .ico{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--sand)}
+  .ico svg{width:24px;height:24px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+  .ico--heat svg{stroke:var(--hot)}
+  .ico--heat .w{animation:rise 1.8s ease-in-out infinite}
+  .ico--heat .w2{animation-delay:.3s}.ico--heat .w3{animation-delay:.6s}
+  @keyframes rise{0%{transform:translateY(4px);opacity:0}35%{opacity:1}100%{transform:translateY(-5px);opacity:0}}
+  .ico--batt svg{stroke:var(--ok)}
+  .ico--batt .lvl{fill:var(--ok);stroke:none;transform-box:fill-box;transform-origin:left center;animation:charge 2.6s steps(4,jump-none) infinite}
+  @keyframes charge{0%{transform:scaleX(.08)}100%{transform:scaleX(1)}}
+  .ico--batt .bolt{fill:#fff;stroke:none;animation:blink 2.6s infinite}
+  @keyframes blink{0%,70%{opacity:0}75%,100%{opacity:1}}
+  .ico--soft svg{stroke:var(--brown-2);fill:#fff}
+  .ico--soft .cloud{animation:float 3s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-3px)}}
+  .ico--gift svg{stroke:var(--burgundy)}
+  .ico--gift .lid{transform-box:fill-box;transform-origin:center bottom;animation:hop 2.8s ease-in-out infinite}
+  @keyframes hop{0%,60%,100%{transform:none}70%{transform:translateY(-5px) rotate(-8deg)}80%{transform:translateY(-2px) rotate(5deg)}90%{transform:none}}
+  /* entrance uses `translate` so it never blocks the hover `transform` */
+  .js .perks li{opacity:0;translate:-14px 0}
+  .js .perks.in li{animation:slideIn .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 120ms)}
+  @keyframes slideIn{to{opacity:1;translate:none}}
+
+  .label{font-size:14px;font-weight:700;margin-bottom:10px}
+  .label span{font-weight:400;color:var(--muted)}
+  .swatches{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+  .swatch{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px 7px 8px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink);transition:border-color .2s}
+  .swatch i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+  .swatch[aria-pressed="true"]{border-color:var(--brown);box-shadow:0 0 0 1px var(--brown)}
+
+  .upsells{display:grid;gap:10px;margin:0 0 18px}
+  .upsell{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;transition:border-color .2s,background .2s}
+  .upsell:has(input:checked){border-color:var(--brown);background:#fffaf5}
+  .upsell img{width:52px;height:52px;border-radius:8px;object-fit:cover}
+  .upsell div{flex:1;font-size:14px}
+  .upsell b{display:block;font-size:15px}
+  .upsell input{width:20px;height:20px;accent-color:var(--brown)}
+
+  /* ---------- Buttons ---------- */
+  .buy{display:flex;gap:10px}
+  .qty{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+  .qty button{width:40px;height:100%;border:0;background:none;font-size:20px;cursor:pointer;color:var(--brown)}
+  .qty output{min-width:24px;text-align:center;font-weight:700}
+  .cta{position:relative;overflow:hidden;flex:1;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--brown);color:#fff;text-decoration:none;font-weight:700;font-size:17px;padding:17px 22px;border-radius:12px;border:0;cursor:pointer;transition:background .2s,transform .1s;text-align:center}
+  .cta:hover{background:var(--brown-2)}
+  .cta:active{transform:scale(.98)}
+  .cta--shine::after{content:"";position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-150%) skewX(-20deg);animation:shine 3.5s ease-in-out infinite;pointer-events:none}
+  @keyframes shine{0%,60%{transform:translateX(-150%) skewX(-20deg)}100%{transform:translateX(330%) skewX(-20deg)}}
+  .duo-hint{font-size:13px;font-weight:700;color:var(--ok);margin-top:8px}
+  .cta--pulse{width:100%;margin-top:12px;background:linear-gradient(135deg,var(--sale),var(--sale-2));font-size:16px;animation:pulse 1.8s ease-out infinite}
+  .cta--pulse:hover{background:linear-gradient(135deg,var(--sale-2),#7c2d12)}
+  .cta--pulse:active{scale:.98}
+  .cta--pulse svg{width:22px;height:22px;flex:none}
+  .cta--pulse .truck{animation:drive 1.8s ease-in-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,89,12,.55);transform:scale(1)}50%{transform:scale(1.025)}70%{box-shadow:0 0 0 14px rgba(232,89,12,0)}100%{box-shadow:0 0 0 0 rgba(232,89,12,0);transform:scale(1)}}
+  @keyframes drive{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
+  .eta{font-size:14px;color:var(--muted);margin-top:10px;text-align:center;text-wrap:balance}
+  .eta b{color:var(--ink)}
+
+  /* ---------- Bundle ---------- */
+  .bundle{position:relative;margin-top:26px;border:2px solid var(--brown);border-radius:18px;background:linear-gradient(180deg,#fffaf5,#fff);padding:22px 16px 16px}
+  .bundle__ribbon{position:absolute;top:-13px;left:16px;background:var(--sale);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 12px;border-radius:999px;overflow:hidden}
+  .bundle__ribbon::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.5),transparent 70%);transform:translateX(-100%);animation:ribbon 3s ease-in-out infinite}
+  @keyframes ribbon{60%,100%{transform:translateX(100%)}}
+  .bundle__head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .bundle__head h3{font-size:21px;text-wrap:balance}
+  .bundle__head p{font-size:14px;color:var(--muted)}
+  .bundle__price{text-align:right;line-height:1.2;flex:none}
+  .bundle__price b{display:block;font-size:26px;color:var(--brown)}
+  .bundle__price s{font-size:14px;color:var(--muted)}
+  .bundle__price em{display:block;font-style:normal;font-size:12px;font-weight:700;color:var(--ok)}
+  .bundle__picks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .pick{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
+  .pick img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex:none;transition:opacity .2s}
+  .pick small{display:block;font-size:12px;color:var(--muted)}
+  .pick strong{display:block;font-size:13px;line-height:1.25}
+  .dots{display:flex;gap:7px;margin-top:5px}
+  .dot{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+  .dot[aria-pressed="true"]{box-shadow:0 0 0 2px var(--brown)}
+  .bundle .cta{width:100%}
+  .bundle__note{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+
+  .guarantees{display:grid;gap:10px;margin:24px 0}
+  .guarantee{display:flex;gap:12px;font-size:14px;color:var(--muted)}
+  .guarantee svg{flex:none;width:22px;height:22px;color:var(--ok);margin-top:2px}
+  .guarantee b{display:block;color:var(--ink);font-size:15px}
+
+  .minirev{display:grid;gap:12px}
+  .minirev figure{display:flex;gap:14px;align-items:center;background:var(--sand);border-radius:14px;padding:12px}
+  .minirev img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none}
+  .minirev blockquote{font-size:14px;font-style:italic}
+  .minirev figcaption{font-size:13px;font-weight:700;margin-top:4px;color:var(--brown)}
+
+  /* ---------- Video band ---------- */
+  .video{background:var(--brown);color:#f4e8dd;padding:72px 0}
+  .video .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+  .video video{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--radius);background:#2b1d16}
+  .video h2{color:#fff;font-size:clamp(30px,4vw,44px);margin-bottom:16px}
+  .video p{font-size:18px;opacity:.9;margin-bottom:28px}
+  .video .cta{background:#fff;color:var(--brown);display:inline-flex}
+  .video .cta:hover{background:var(--sand)}
+
+  /* ---------- Features ---------- */
+  .features{padding:72px 0}
+  .section-title{text-align:center;font-size:clamp(28px,3.5vw,38px);margin-bottom:36px}
+  .features__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .feature{background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+  .feature img{aspect-ratio:1;object-fit:cover;width:100%}
+  .feature div{padding:18px 20px 22px}
+  .feature h3{font-size:20px;margin-bottom:6px}
+  .feature p{font-size:15px;color:var(--muted)}
+
+  /* ---------- Reviews ---------- */
+  .reviews{padding:72px 0;background:var(--sand)}
+  .reviews__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .review{background:#fff;border-radius:var(--radius);overflow:hidden;transition:transform .25s,box-shadow .25s}
+  .review img{aspect-ratio:4/5;object-fit:cover;width:100%}
+  .review div{padding:18px 20px 22px}
+  .review h3{font-size:19px;margin:6px 0}
+  .review p{font-size:15px;color:var(--muted)}
+  .review cite{display:block;margin-top:10px;font-style:normal;font-weight:700;font-size:14px;color:var(--brown)}
+  @media (hover:hover){.feature:hover,.review:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(74,36,24,.12)}}
+
+  /* ---------- FAQ ---------- */
+  .faq{padding:72px 0}
+  .faq .wrap{max-width:780px}
+  details{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;transition:border-color .2s}
+  details[open]{border-color:var(--brown)}
+  summary{list-style:none;cursor:pointer;padding:18px 52px 18px 20px;font-weight:700;position:relative}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400;color:var(--brown);transition:transform .2s}
+  details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+  details p{padding:0 20px 18px;color:var(--muted)}
+  details[open] p{animation:fadeDown .3s ease}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}}
+
+  /* ---------- Final CTA ---------- */
+  .final{padding:0 0 80px}
+  .final__card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#fff;border-radius:24px;overflow:hidden;border:1px solid var(--line)}
+  .final__card img{width:100%;height:100%;object-fit:cover;aspect-ratio:1}
+  .final__body{padding:48px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .final__body h2{font-size:clamp(28px,3.5vw,40px)}
+
+  footer{background:var(--brown);color:#e9d9cb;padding:40px 0 36px;font-size:14px;text-align:center}
+  footer img{height:46px;width:auto;margin:0 auto 18px;opacity:.9}
+  footer nav{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:14px}
+  footer a{text-decoration:none;opacity:.85}
+  footer a:hover{opacity:1}
+
+  /* ---------- Sticky mobile CTA ---------- */
+  .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 16px;display:none;align-items:center;gap:12px;z-index:50;transform:translateY(100%);visibility:hidden;transition:transform .25s,visibility 0s .25s}
+  .sticky.show{transform:none;visibility:visible;transition-delay:0s}
+  .sticky img{width:46px;height:46px;border-radius:8px;object-fit:cover}
+  .sticky div{flex:1;font-size:13px;line-height:1.3}
+  .sticky b{display:block;font-size:15px;color:var(--brown)}
+  .sticky .cta{flex:none;padding:13px 18px;font-size:15px}
+
+  /* ---------- Delivery / order pop-up ---------- */
+  .toast{position:fixed;left:20px;bottom:20px;z-index:60;display:flex;gap:12px;align-items:center;width:340px;max-width:calc(100vw - 24px);background:#fff;border-radius:14px;box-shadow:0 14px 36px rgba(43,29,22,.2);padding:10px 40px 10px 10px;transform:translateY(140%);opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.2,.9,.3,1.15),opacity .3s,visibility 0s .5s,bottom .25s}
+  .toast.show{transform:none;opacity:1;visibility:visible;transition-delay:0s}
+  .toast img{width:54px;height:54px;border-radius:10px;object-fit:cover;flex:none}
+  .toast__body{font-size:13px;line-height:1.35;min-width:0}
+  .toast__body b{display:block;font-size:14px;color:var(--ink)}
+  .toast__body small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+  .toast__body small .ok{color:var(--ok);font-weight:700}
+  .toast__x{position:absolute;top:4px;right:4px;width:32px;height:32px;border:0;background:none;font-size:18px;line-height:1;color:var(--muted);cursor:pointer;border-radius:8px}
+  .toast__demo{position:absolute;top:-9px;left:12px;background:#111;color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:999px}
+
+  /* ---------- Scroll reveal ---------- */
+  .js .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .js .reveal.in{opacity:1;transform:none}
+  .js .reveal-d1{transition-delay:.12s}.js .reveal-d2{transition-delay:.24s}
+
+  @media (max-width:900px){
+    .hero .wrap,.video .wrap,.final__card{grid-template-columns:minmax(0,1fr)}
+    .hero .wrap{gap:24px}
+    .gallery{position:static}
+    .features__grid,.reviews__grid{gap:12px}
+    .feature div,.review div{padding:14px}
+    .final__body{padding:28px 22px}
+    .sticky{display:flex}
+    footer{padding-bottom:96px}
+    .toast{left:12px;right:12px;width:auto;max-width:none;bottom:12px}
+    .sticky-on .toast{bottom:84px}
+  }
+  @media (max-width:600px){
+    .wrap{padding:0 16px}
+    .hero{padding-top:16px}
+    header img{height:46px}
+    .thumbs{grid-template-columns:repeat(7,64px);overflow-x:auto;scrollbar-width:none}
+    .features__grid,.reviews__grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 8px;gap:14px;scrollbar-width:none}
+    .feature,.review{flex:0 0 82%;scroll-snap-align:center}
+    /* carousel cards sit off-screen sideways: show them as-is instead of waiting for a reveal */
+    .js .feature.reveal,.js .review.reveal{opacity:1;transform:none}
+    .video,.features,.reviews,.faq{padding:52px 0}
+    .bundle__head h3{font-size:19px}
+    .bundle__picks{grid-template-columns:1fr}
+  }
+  @media (max-width:380px){
+    .cta{font-size:15px;padding:15px 12px}
+    .qty button{width:32px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .js .reveal{opacity:1;transform:none}
+    .js .perks li{opacity:1;translate:none}
+    .bar{white-space:normal}
+    .bar__track{display:flex;justify-content:center;padding:6px 8px}
+    .bar__group{flex-wrap:wrap;justify-content:center;row-gap:2px}
+    .bar__group[aria-hidden]{display:none}
+    .bar__item{padding:3px 14px}
+    .bar__item::after{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar" role="region" aria-label="Announcements">
+  <div class="bar__track">
+    <div class="bar__group">
+      <span class="bar__item js-sale">🚀 <b>Launch Offer: <span data-pct>30</span>% OFF</b> — ends in <span class="js-countdown">--</span></span>
+      <span class="bar__item">🚚 Free tracked delivery — at your door within <b><span data-days>7</span> days</b></span>
+      <span class="bar__item">🎁 Bundle &amp; save: <b>2 for <span data-money="bundle">€70</span></b></span>
+      <span class="bar__item">↩️ 30-day money-back guarantee</span>
+    </div>
+    <div class="bar__group" aria-hidden="true">
+      <span class="bar__item js-sale">🚀 <b>Launch Offer: <span data-pct>30</span>% OFF</b> — ends in <span class="js-countdown">--</span></span>
+      <span class="bar__item">🚚 Free tracked delivery — at your door within <b><span data-days>7</span> days</b></span>
+      <span class="bar__item">🎁 Bundle &amp; save: <b>2 for <span data-money="bundle">€70</span></b></span>
+      <span class="bar__item">↩️ 30-day money-back guarantee</span>
+    </div>
+  </div>
+</div>
+
+<header><div class="wrap"><img src="assets/coocoat-logo.svg" alt="Coocoat – Heated Wearable Blankets" width="593" height="166"></div></header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="gallery">
+      <div class="gallery__main">
+        <span class="gallery__badge js-sale">SAVE <span data-pct>30</span>%</span>
+        <img id="mainImg" src="assets/hero-beige.jpg" alt="Woman wearing the beige Coocoat heated shawl" width="1200" height="1200" fetchpriority="high">
+      </div>
+      <div class="thumbs" id="thumbs">
+        <button aria-current="true" aria-label="Photo 1" data-full="assets/hero-beige.jpg" data-alt="Woman wearing the beige Coocoat heated shawl"><img src="assets/thumbs/hero-beige.jpg" alt=""></button>
+        <button aria-label="Photo 2" data-full="assets/feature-usb.jpg" data-alt="Coocoat features: USB powered, 5V low voltage, fast warm-up, machine washable"><img src="assets/thumbs/feature-usb.jpg" alt=""></button>
+        <button aria-label="Photo 3" data-full="assets/feature-oversized.jpg" data-alt="Coocoat size: 150 × 80 cm, shawl, lap blanket or travel wrap"><img src="assets/thumbs/feature-oversized.jpg" alt=""></button>
+        <button aria-label="Photo 4" data-full="assets/gift-box.jpg" data-alt="Coocoat folded in a gift box"><img src="assets/thumbs/gift-box.jpg" alt=""></button>
+        <button aria-label="Photo 5" data-full="assets/color-beige.jpg" data-alt="Coocoat heated shawl in Beige"><img src="assets/thumbs/color-beige.jpg" alt=""></button>
+        <button aria-label="Photo 6" data-full="assets/color-wine-red.jpg" data-alt="Coocoat heated shawl in Wine Red"><img src="assets/thumbs/color-wine-red.jpg" alt=""></button>
+        <button aria-label="Photo 7" data-full="assets/color-matcha-green.jpg" data-alt="Coocoat heated shawl in Matcha Green"><img src="assets/thumbs/color-matcha-green.jpg" alt=""></button>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="proof" id="proof" hidden>
+        <div class="avatars">
+          <img src="assets/avatar-1.jpg" alt=""><img src="assets/avatar-2.jpg" alt=""><img src="assets/avatar-3.jpg" alt=""><img src="assets/avatar-4.jpg" alt=""><img src="assets/avatar-5.jpg" alt="">
+        </div>
+        <span class="live" aria-hidden="true"></span>
+        <span><b><span id="orders24"></span> orders</b> in the last 24h</span>
+      </div>
+
+      <h1>Coocoat Heated Shawl</h1>
+      <div class="rating js-rating"><span class="stars" aria-hidden="true">★★★★★</span><span><span data-rating>4.8</span> (<span data-reviews>541</span> Reviews)</span></div>
+
+      <div class="price">
+        <span class="price__now" data-money="price">€44.95</span>
+        <span class="price__was js-sale" data-money="compare">€64.95</span>
+        <span class="price__save js-sale">SAVE <span data-pct>30</span>%</span>
+      </div>
+
+      <ul class="perks" id="perks">
+        <li style="--i:0">
+          <span class="ico ico--heat" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="w w1" d="M7 19c-1.5-2 1.5-3.5 0-6s1.5-3.5 0-6"/><path class="w w2" d="M12 19c-1.5-2 1.5-3.5 0-6s1.5-3.5 0-6"/><path class="w w3" d="M17 19c-1.5-2 1.5-3.5 0-6s1.5-3.5 0-6"/><path d="M4 21.5h16"/></svg></span>
+          <span><b>Instant</b>, feel-good warmth</span>
+        </li>
+        <li style="--i:1">
+          <span class="ico ico--batt" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2.5"/><path d="M22 10.5v3"/><rect class="lvl" x="4" y="9" width="14" height="6" rx="1"/><path class="bolt" d="M11.8 8.6 8.6 12.4h2.6l-.9 3.1 3.3-3.9h-2.6z"/></svg></span>
+          <span><b>Runs</b> on any USB power bank</span>
+        </li>
+        <li style="--i:2">
+          <span class="ico ico--soft" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="cloud" d="M7 18h10.5a4 4 0 0 0 .4-8 6 6 0 0 0-11.4-.9A4.5 4.5 0 0 0 7 18z"/></svg></span>
+          <span><b>Soft</b> enough to live in</span>
+        </li>
+        <li style="--i:3">
+          <span class="ico ico--gift" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="1.5"/><path d="M12 11v10"/><g class="lid"><rect x="3" y="7.5" width="18" height="3.5" rx="1"/><path d="M12 7.5C10.5 4.5 7 4 7 6s3.5 1.5 5 1.5c1.5 0 5 .5 5-1.5s-3.5-1.5-5 1.5"/></g></svg></span>
+          <span><b>Made</b> for gifting (or keeping)</span>
+        </li>
+      </ul>
+
+      <p class="label">Color – <span id="colorName">Beige</span></p>
+      <div class="swatches" id="swatches">
+        <button class="swatch" aria-pressed="true" data-color="Beige"><i style="background:#d4a77f"></i>Beige</button>
+        <button class="swatch" aria-pressed="false" data-color="Wine Red"><i style="background:#7a1f2b"></i>Wine Red</button>
+        <button class="swatch" aria-pressed="false" data-color="Matcha Green"><i style="background:#9aaa78"></i>Matcha Green</button>
+      </div>
+
+      <div class="upsells">
+        <label class="upsell"><img src="assets/addon-power-bank.jpg" alt=""><div><b>Power Bank</b>Plug &amp; go warmth · <span data-money="powerBank">€19.95</span></div><input type="checkbox" data-addon="powerBank"></label>
+        <label class="upsell"><img src="assets/addon-mystery-box.jpg" alt=""><div><b>Mystery Box</b>A cozy surprise · <span data-money="mysteryBox">€9.50</span></div><input type="checkbox" data-addon="mysteryBox"></label>
+      </div>
+
+      <div class="buy">
+        <div class="qty"><button type="button" id="minus" aria-label="Decrease quantity">−</button><output id="qty">1</output><button type="button" id="plus" aria-label="Increase quantity">+</button></div>
+        <a class="cta cta--shine js-buy" id="atc" href="#"><span>Add to cart · <span class="js-total">€44.95</span></span></a>
+      </div>
+      <p class="duo-hint" id="duoHint" hidden>🎁 Duo price applied: you save <span data-money="bundleSave">€19.90</span> at checkout</p>
+
+      <a class="cta cta--pulse js-buy" href="#">
+        <svg class="truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4h13v12H1z"/><path d="M14 9h4l3 3.5V16h-7"/><circle cx="5.5" cy="18" r="2"/><circle cx="17.5" cy="18" r="2"/></svg>
+        <span>Order now &amp; get it in <span data-days>7</span>&nbsp;days</span>
+      </a>
+      <p class="eta">📍 <span id="etaText">Free tracked delivery — arrives by <b class="js-eta">…</b></span></p>
+
+      <div class="bundle" id="bundle">
+        <span class="bundle__ribbon">BEST VALUE</span>
+        <div class="bundle__head">
+          <div>
+            <h3>Duo Bundle: 2&nbsp;Coocoats</h3>
+            <p>Mix &amp; match colors. One for you, one to gift.</p>
+          </div>
+          <div class="bundle__price"><b data-money="bundle">€70</b><s data-money="bundleCompare">€89.90</s><em>You save <span data-money="bundleSave">€19.90</span></em></div>
+        </div>
+        <div class="bundle__picks">
+          <div class="pick" data-pick="0">
+            <img src="assets/thumbs/color-beige.jpg" alt="">
+            <div><small>Coocoat #1</small><strong class="js-pick-name">Beige</strong><div class="dots"></div></div>
+          </div>
+          <div class="pick" data-pick="1">
+            <img src="assets/thumbs/color-wine-red.jpg" alt="">
+            <div><small>Coocoat #2</small><strong class="js-pick-name">Wine Red</strong><div class="dots"></div></div>
+          </div>
+        </div>
+        <a class="cta cta--shine" id="bundleBtn" href="#"><span>Get the Duo · <span id="bundleTotal">€70</span></span></a>
+        <p class="bundle__note">Free tracked delivery · 30-day money-back guarantee</p>
+      </div>
+
+      <div class="guarantees">
+        <div class="guarantee">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div><b>30-Day Money-Back Guarantee</b>Try Coocoat risk-free. If it's not everything you hoped for, you have 30 days from delivery to request a return under our refund policy. No hassle, no hard feelings.</div>
+        </div>
+        <div class="guarantee">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div><b>Free &amp; Tracked Delivery</b>Free shipping on every order, delivered within <span data-days>7</span> days. You get a tracking link as soon as your order ships.</div>
+        </div>
+      </div>
+
+      <div class="minirev">
+        <figure class="reveal"><img src="assets/testimonial-megan.jpg" alt="" loading="lazy"><div><blockquote>I love that I can wear it at my desk, on the porch, or take it to chilly games. Way more useful than another heated blanket.</blockquote><figcaption>Megan R.</figcaption></div></figure>
+        <figure class="reveal"><img src="assets/testimonial-lauren.jpg" alt="" loading="lazy"><div><blockquote>I've worn mine working from home, traveling, and sitting outside at night. It's become my go-to whenever I know I'll be cold.</blockquote><figcaption>Lauren T.</figcaption></div></figure>
+        <figure class="reveal"><img src="assets/testimonial-nicole.jpg" alt="" loading="lazy"><div><blockquote>The best part is being able to get up and move around without losing the warmth. I use it all over the house and outside too.</blockquote><figcaption>Nicole D.</figcaption></div></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="video">
+  <div class="wrap">
+    <video class="reveal" src="assets/video-cozy.mp4" poster="assets/video-cozy-poster.jpg" muted loop playsinline preload="none" aria-label="Woman wrapping herself in a Coocoat on the sofa"></video>
+    <div class="reveal reveal-d1">
+      <h2>For the Ones Who Are Always Cold ♨️</h2>
+      <p>Made for chilly mornings, cold offices, couch nights, and anyone who lives under a blanket. Coocoat wraps you in soft, wearable warmth without tying you to the couch.</p>
+      <a class="cta js-buy" href="#"><span>Get yours – <span class="js-total">€44.95</span></span></a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <h2 class="section-title reveal">Warmth that goes where you go</h2>
+    <div class="features__grid">
+      <article class="feature reveal"><img src="assets/feature-usb.jpg" alt="Coocoat features: USB powered, 5V low voltage, fast warm-up, machine washable" loading="lazy" width="713" height="713"><div><h3>Heat where it counts</h3><p>A discreet heating panel warms your back and shoulders. It runs on 5V from any USB power bank, so no wall outlet ties you down.</p></div></article>
+      <article class="feature reveal reveal-d1"><img src="assets/feature-oversized.jpg" alt="Coocoat size: 150 × 80 cm, works as a shawl, lap blanket, office nap or travel wrap" loading="lazy" width="800" height="800"><div><h3>One shawl, many uses</h3><p>150 × 80 cm: wear it as a shawl, or use it as a lap blanket, on the sofa, for an office nap or as a travel wrap.</p></div></article>
+      <article class="feature reveal reveal-d2"><img src="assets/gift-box.jpg" alt="Coocoat folded in a gift box" loading="lazy" width="1200" height="1200"><div><h3>Soft enough to live in</h3><p>Waffle-knit outside, plush fleece inside, and a relaxed zip-front fit that works for everyone.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="wrap">
+    <h2 class="section-title reveal">What Our Customers Say…</h2>
+    <div class="reviews__grid">
+      <article class="review reveal"><img src="assets/review-kristen.jpg" alt="" loading="lazy"><div><span class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</span><h3>Game day essential</h3><p>I wore it to an outdoor game and stayed comfortable the whole time. So much easier than hauling around a blanket.</p><cite>Kristen M.</cite></div></article>
+      <article class="review reveal reveal-d1"><img src="assets/review-sarah.jpg" alt="" loading="lazy"><div><span class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</span><h3>Even better up close</h3><p>The fabric is incredibly soft and the little heated panel is surprisingly discreet. It feels way nicer than I expected.</p><cite>Sarah K.</cite></div></article>
+      <article class="review reveal reveal-d2"><img src="assets/review-amanda.jpg" alt="" loading="lazy"><div><span class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</span><h3>My morning go-to</h3><p>I throw it on for coffee on the porch, errands, and working from home. I love that I can actually move around in it.</p><cite>Amanda S.</cite></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2 class="section-title reveal">Frequently Asked Questions</h2>
+    <div id="faqList">
+      <details name="faq" open><summary>Do I need a power bank? Is one included?</summary><p>Coocoat runs on any standard 5V USB power bank, which is not included. Use one you already have, or tick the Power Bank add-on above the Add to cart button. No wall outlet needed: stay warm on the sofa, at your desk, in the stands or on a chilly walk.</p></details>
+      <details name="faq"><summary>When will I get my order?</summary><p>Delivery is free and tracked, within <span data-days>7</span> days. You get a tracking link by email as soon as your order ships.</p></details>
+      <details name="faq"><summary>What if I don't love it?</summary><p>You're covered by our 30-day money-back guarantee. If it's not for you, request a return within 30 days of delivery under our refund policy.</p></details>
+      <details name="faq"><summary>How fast does it warm up?</summary><p>Fast. Switch it on and the heating panel spreads warmth across your back and shoulders, right where you feel the cold most, while the plush fleece lining holds it in.</p></details>
+      <details name="faq"><summary>How long does the warmth last?</summary><p>It depends on the power bank you plug in: the bigger its capacity, the longer you stay warm.</p></details>
+      <details name="faq"><summary>Will it fit me?</summary><p>Yes. It's one size: 150 × 80 cm, with a relaxed, oversized cape cut that fits a wide range of body types. The zip-front adds structure without feeling tight and leaves plenty of room to move.</p></details>
+      <details name="faq"><summary>Is it safe?</summary><p>It runs on 5V low voltage from a USB power bank, the same kind of power you use to charge a phone.</p></details>
+      <details name="faq"><summary>Is it machine washable?</summary><p>Yes. Remove the power bank and unclip the detachable power button, then machine wash following the care label. Let it air dry completely before reconnecting, and don't iron over the heating panel.</p></details>
+      <details name="faq"><summary>Can I get two in different colors?</summary><p>Yes! The Duo Bundle gets you 2 Coocoats for <span data-money="bundle">€70</span> instead of <span data-money="bundleCompare">€89.90</span>, and you pick each color. Perfect for gifting.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <div class="final__card reveal">
+      <img src="assets/hero-beige.jpg" alt="" loading="lazy" width="1200" height="1200">
+      <div class="final__body">
+        <h2>Stay cozy, anywhere.</h2>
+        <div class="rating js-rating"><span class="stars" aria-hidden="true">★★★★★</span><span><span data-rating>4.8</span> · <span data-reviews>541</span> reviews</span></div>
+        <div class="price" style="margin:0"><span class="price__now" data-money="price">€44.95</span><span class="price__was js-sale" data-money="compare">€64.95</span><span class="price__save js-sale">SAVE <span data-pct>30</span>%</span></div>
+        <a class="cta cta--shine js-buy" href="#"><span>Add to cart · <span class="js-total">€44.95</span></span></a>
+        <p style="font-size:14px;color:var(--muted)">✓ Free tracked delivery within <span data-days>7</span> days &nbsp; ✓ 30-day money-back guarantee</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/coocoat-logo-white.svg" alt="Coocoat" width="593" height="166">
+    <nav>
+      <a data-path="/pages/contact" href="#">Contact</a>
+      <a data-path="/policies/shipping-policy" href="#">Shipping Policy</a>
+      <a data-path="/policies/refund-policy" href="#">Refund Policy</a>
+      <a data-path="/policies/privacy-policy" href="#">Privacy Policy</a>
+      <a data-path="/policies/terms-of-service" href="#">Terms of Service</a>
+      <a data-path="/policies/legal-notice" href="#">Legal Notice</a>
+    </nav>
+    <p>© 2026, Coocoat</p>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky" inert>
+  <img id="stickyImg" src="assets/thumbs/color-beige.jpg" alt="">
+  <div><b>Coocoat</b><span id="stickyColor">Beige</span> · <span class="js-total">€44.95</span></div>
+  <a class="cta js-buy" href="#">Add to cart</a>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <img id="toastImg" src="assets/thumbs/color-beige.jpg" alt="">
+  <div class="toast__body"><b id="toastTitle"></b><span id="toastText"></span><small id="toastMeta"></small></div>
+  <button class="toast__x" id="toastClose" aria-label="Close">×</button>
+</div>
+
+<script>
+/* =====================================================================
+   SETTINGS — edit these to match your store (see LISEZ-MOI.md)
+   ===================================================================== */
+const CONFIG = {
+  // Your Shopify store. All buy buttons and footer links point here.
+  // Only switch to 'https://coocoat.com' once that address opens your Shopify store.
+  store: 'https://toastyblanki.com',
+
+  // Must match the currency your Shopify checkout charges in.
+  currency: '€',
+  price: 44.95,
+  // "Was" price shown crossed out. EU rule (Omnibus): it must be the lowest price
+  // you charged in the 30 days before this offer started.
+  comparePrice: 64.95,
+
+  // Shopify variant IDs for each color (Products → your product → click the variant → ID at the end of the URL)
+  variants: {
+    'Beige':        { id: '50445952745539', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
+    'Wine Red':     { id: '50445952778307', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
+    'Matcha Green': { id: '50445952811075', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
+  },
+  addons: {
+    powerBank:  { id: '50446597685315', price: 19.95 },
+    mysteryBox: { id: '43665657593923', price: 9.50 },
+  },
+
+  // Duo bundle. In Shopify: Discounts → Create discount → Amount off products → code DUO70
+  // → Fixed amount = 2 × price − bundle price (19.90) → Applies to: the Coocoat product only
+  // → Minimum quantity of items: 2 → tick "Only apply discount once per order".
+  bundle: { price: 70, discountCode: 'DUO70' },
+
+  // Delivery promise used in the banner, the "Order now" button, the delivery date and the FAQ.
+  deliveryDays: 7,
+  // Countries (ISO codes) where free delivery within deliveryDays is true.
+  // The pop-up only names the visitor's city when they are in one of these.
+  shipsTo: ['FR'],
+
+  // Real end date of the offer. After it, the banner offer, "SAVE x%" badges and crossed-out price disappear.
+  saleEnds: '2026-11-01T23:59:00+01:00',
+
+  // Your REAL figures (e.g. from a review app like Judge.me). Set rating to null to hide the stars.
+  rating: 4.8,
+  reviewCount: 541,
+  // Real number of orders in the last 24h (Shopify Analytics). null hides the line.
+  ordersLast24h: null,
+
+  // Purchase pop-up: REAL recent orders only. Show an initial unless the customer agreed to be named.
+  // Example: { name: 'Camille B.', city: 'Bordeaux', color: 'Wine Red', time: '2026-10-20T09:12:00+02:00' }
+  // Orders older than recentOrdersMaxHours are skipped automatically.
+  recentOrders: [],
+  recentOrdersMaxHours: 72,
+};
+
+/* ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const money = n => CONFIG.currency + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
+const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
+const cartUrl = (lines, discount) =>
+  CONFIG.store + '/cart/' + lines.map(([id, q]) => id + ':' + q).join(',') +
+  (discount ? '?discount=' + encodeURIComponent(discount) : '');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const state = { color: 'Beige', qty: 1, duo: ['Beige', 'Wine Red'] };
+const duoSave = 2 * CONFIG.price - CONFIG.bundle.price;
+
+/* ---------- Prices, percentages, rating, delivery days (all from CONFIG) ---------- */
+const PRICES = {
+  price: CONFIG.price, compare: CONFIG.comparePrice, bundle: CONFIG.bundle.price,
+  bundleCompare: 2 * CONFIG.price, bundleSave: duoSave,
+  powerBank: CONFIG.addons.powerBank.price, mysteryBox: CONFIG.addons.mysteryBox.price,
+};
+$$('[data-money]').forEach(el => el.textContent = money(PRICES[el.dataset.money]));
+const pct = Math.floor((1 - CONFIG.price / CONFIG.comparePrice) * 100);
+$$('[data-pct]').forEach(el => el.textContent = pct);
+$$('[data-days]').forEach(el => el.textContent = CONFIG.deliveryDays);
+if (CONFIG.rating == null) $$('.js-rating').forEach(el => el.remove());
+else {
+  $$('[data-rating]').forEach(el => el.textContent = CONFIG.rating);
+  $$('[data-reviews]').forEach(el => el.textContent = CONFIG.reviewCount);
+}
+if (Number.isFinite(CONFIG.ordersLast24h) && CONFIG.ordersLast24h > 0) {
+  $('#orders24').textContent = CONFIG.ordersLast24h + '+';
+  $('#proof').hidden = false;
+}
+
+/* ---------- Delivery date (skips Sundays) ---------- */
+const etaDate = (() => {
+  const d = new Date(); d.setDate(d.getDate() + CONFIG.deliveryDays);
+  if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+})();
+$$('.js-eta').forEach(el => el.textContent = etaDate);
+
+/* ---------- Footer links ---------- */
+$$('[data-path]').forEach(a => a.href = CONFIG.store + a.dataset.path);
+
+/* ---------- Gallery ---------- */
+const mainImg = $('#mainImg');
+const thumbs = $$('#thumbs button');
+function show(src, alt) {
+  mainImg.style.opacity = 0;
+  setTimeout(() => { mainImg.src = src; if (alt) mainImg.alt = alt; mainImg.style.opacity = 1; }, 150);
+  thumbs.forEach(b => b.setAttribute('aria-current', b.dataset.full === src));
+}
+thumbs.forEach(b => b.addEventListener('click', () => show(b.dataset.full, b.dataset.alt)));
+
+/* ---------- Color + quantity + add-ons ---------- */
+$$('.swatch').forEach(s => s.addEventListener('click', () => {
+  $$('.swatch').forEach(x => x.setAttribute('aria-pressed', x === s));
+  state.color = s.dataset.color;
+  const v = CONFIG.variants[state.color];
+  $('#colorName').textContent = state.color;
+  $('#stickyColor').textContent = state.color;
+  $('#stickyImg').src = v.thumb;
+  show(v.img, v.alt);
+  update();
+}));
+$('#plus').onclick = () => { state.qty = Math.min(10, state.qty + 1); update(); };
+$('#minus').onclick = () => { state.qty = Math.max(1, state.qty - 1); update(); };
+$$('.upsell input').forEach(i => i.addEventListener('change', update));
+
+const selectedAddons = () => $$('.upsell input:checked').map(i => CONFIG.addons[i.dataset.addon]);
+
+function update() {
+  $('#qty').textContent = state.qty;
+  const addons = selectedAddons();
+  const addonsTotal = addons.reduce((t, a) => t + a.price, 0);
+  // 2 or more shawls get the Duo price automatically (DUO70 applies once per order)
+  const duo = state.qty >= 2;
+  const total = CONFIG.price * state.qty - (duo ? duoSave : 0) + addonsTotal;
+  const href = cartUrl([[CONFIG.variants[state.color].id, state.qty], ...addons.map(a => [a.id, 1])],
+    duo ? CONFIG.bundle.discountCode : '');
+  $$('.js-buy').forEach(a => a.href = href);
+  $$('.js-total').forEach(el => el.textContent = money(total));
+  $('#duoHint').hidden = !duo;
+  updateBundle(addons, addonsTotal);
+}
+
+/* ---------- Duo bundle ---------- */
+$$('.pick').forEach(pick => {
+  const n = +pick.dataset.pick;
+  const dots = $('.dots', pick);
+  Object.entries(CONFIG.variants).forEach(([name, v]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'dot'; b.style.background = v.hex;
+    b.setAttribute('aria-label', `Coocoat #${n + 1}: ${name}`);
+    b.setAttribute('aria-pressed', state.duo[n] === name);
+    b.onclick = () => {
+      state.duo[n] = name;
+      $$('.dot', dots).forEach(d => d.setAttribute('aria-pressed', d === b));
+      $('.js-pick-name', pick).textContent = name;
+      $('img', pick).src = v.thumb;
+      updateBundle();
+    };
+    dots.appendChild(b);
+  });
+});
+function updateBundle(addons = selectedAddons(), addonsTotal = addons.reduce((t, a) => t + a.price, 0)) {
+  const [a, b] = state.duo.map(c => CONFIG.variants[c].id);
+  const lines = a === b ? [[a, 2]] : [[a, 1], [b, 1]];
+  $('#bundleBtn').href = cartUrl([...lines, ...addons.map(x => [x.id, 1])], CONFIG.bundle.discountCode);
+  $('#bundleTotal').textContent = money(CONFIG.bundle.price + addonsTotal);
+}
+
+/* ---------- Offer countdown: everything sale-related disappears at the real end date ---------- */
+(function countdown() {
+  const end = Date.parse(CONFIG.saleEnds);
+  const els = $$('.js-countdown');
+  const pad = n => String(n).padStart(2, '0');
+  function tick() {
+    const ms = end - Date.now();
+    if (!(ms > 0)) { document.documentElement.classList.add('sale-over'); return; }
+    const s = Math.floor(ms / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+    const txt = (d ? d + 'd ' : '') + pad(h) + 'h ' + pad(m) + 'm ' + pad(s % 60) + 's';
+    els.forEach(el => el.textContent = txt);
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+
+/* ---------- Sticky bar on mobile (shown once the main buttons are scrolled past) ---------- */
+const sticky = $('#sticky'), buy = $('.buy');
+let stickyQueued = false;
+function checkSticky() {
+  stickyQueued = false;
+  const on = buy.getBoundingClientRect().bottom < 0;
+  sticky.classList.toggle('show', on);
+  sticky.inert = !on;
+  document.body.classList.toggle('sticky-on', on);
+}
+addEventListener('scroll', () => { if (!stickyQueued) { stickyQueued = true; requestAnimationFrame(checkSticky); } }, { passive: true });
+addEventListener('resize', checkSticky);
+checkSticky();
+
+/* ---------- Pop-up: visitor delivery estimate (IP city) + real recent orders ---------- */
+(function popups() {
+  const toast = $('#toast');
+  toast.inert = true;
+  const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+  const minsAgo = m => new Date(Date.now() - m * 60000).toISOString();
+  const maxAge = (CONFIG.recentOrdersMaxHours || 72) * 3600e3;
+  const valid = o => {
+    const t = Date.parse(o && o.time);
+    return o && o.name && o.city && CONFIG.variants[o.color] && Number.isFinite(t) && t <= Date.now() + 60000 && Date.now() - t < maxAge;
+  };
+  const orders = (DEMO ? [
+    { name: 'Camille B.', city: 'Bordeaux', color: 'Wine Red', time: minsAgo(4) },
+    { name: 'Léa M.', city: 'Lyon', color: 'Beige', time: minsAgo(17), duo: true },
+    { name: 'Thomas R.', city: 'Paris', color: 'Matcha Green', time: minsAgo(38) },
+  ] : (CONFIG.recentOrders || [])).filter(valid);
+
+  let closed = false;
+  try { closed = sessionStorage.getItem('toast-closed') === '1'; } catch (e) {}
+  $('#toastClose').onclick = () => {
+    closed = true; hide();
+    try { sessionStorage.setItem('toast-closed', '1'); } catch (e) {}
+  };
+
+  function ago(iso) {
+    const m = Math.max(1, Math.round((Date.now() - Date.parse(iso)) / 60000));
+    if (m < 60) return m + (m === 1 ? ' minute ago' : ' minutes ago');
+    const h = Math.round(m / 60);
+    if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+    const d = Math.round(h / 24);
+    return d + (d === 1 ? ' day ago' : ' days ago');
+  }
+  function render(t) {
+    $('#toastImg').src = t.img;
+    $('.toast__demo', toast)?.remove();
+    if (DEMO) toast.insertAdjacentHTML('afterbegin', '<span class="toast__demo">DEMO</span>');
+    toast.classList.add('show'); toast.inert = false;
+    // fill the live region after it is visible so screen readers announce it
+    requestAnimationFrame(() => {
+      $('#toastTitle').textContent = t.title;
+      $('#toastText').textContent = t.text;
+      $('#toastMeta').innerHTML = t.meta;
+    });
+  }
+  function hide() { toast.classList.remove('show'); toast.inert = true; }
+  // On phones, wait while a main button sits where the pop-up would cover it
+  function coversButtons() {
+    if (innerWidth > 900) return false;
+    const zoneTop = innerHeight - 170;
+    return $$('.buy, .cta--pulse, #bundleBtn').some(el => {
+      const r = el.getBoundingClientRect();
+      return r.bottom > zoneTop && r.top < innerHeight;
+    });
+  }
+
+  // Visitor location from IP → personal delivery estimate (only where it is true)
+  const ctl = new AbortController();
+  setTimeout(() => ctl.abort(), 3000);
+  fetch('https://get.geojs.io/v1/ip/geo.json', { signal: ctl.signal })
+    .then(r => r.ok ? r.json() : null).catch(() => null)
+    .then(g => {
+      const city = g && g.city && (CONFIG.shipsTo || []).includes(g.country_code) ? g.city : null;
+      if (city) $('#etaText').innerHTML = `Free tracked delivery to <b>${esc(city)}</b> — arrives by <b>${etaDate}</b>`;
+
+      // Orders near the visitor first, then newest first
+      orders.sort((a, b) => (b.city === city) - (a.city === city) || Date.parse(b.time) - Date.parse(a.time));
+      const queue = [];
+      if (city) queue.push({
+        img: CONFIG.variants[state.color].thumb,
+        title: `📍 Delivering to ${city}`,
+        text: `Order today, get it by ${etaDate}`,
+        meta: '<span class="ok">✓</span> Free tracked delivery',
+      });
+      orders.forEach(o => queue.push({
+        img: CONFIG.variants[o.color].thumb,
+        title: `${o.name} in ${o.city}`,
+        text: o.duo ? 'bought the Duo Bundle' : `bought Coocoat – ${o.color}`,
+        meta: DEMO ? `${ago(o.time)} · Demo preview (not a real order)` : `${ago(o.time)} · <span class="ok">✓ Verified order</span>`,
+      }));
+
+      let i = 0;
+      function next() {
+        if (closed || i >= queue.length) return;
+        if (coversButtons()) { setTimeout(next, 3000); return; }
+        render(queue[i++]);
+        setTimeout(() => { hide(); setTimeout(next, 12000); }, 6500);
+      }
+      setTimeout(next, 5000);
+    });
+})();
+
+/* ---------- Scroll reveal + perks entrance ---------- */
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const t = e.target;
+    t.classList.add('in');
+    io.unobserve(t);
+    // once revealed, hand cards back to their own hover transition
+    if (t.matches('.feature, .review')) t.addEventListener('transitionend', function done(ev) {
+      if (ev.target !== t || ev.propertyName !== 'transform') return;
+      t.removeEventListener('transitionend', done);
+      t.classList.remove('reveal', 'reveal-d1', 'reveal-d2', 'in');
+    });
+  }), { threshold: 0.15 });
+  $$('.reveal, #perks').forEach(el => io.observe(el));
+} else {
+  $$('.reveal, #perks').forEach(el => el.classList.add('in'));
+}
+
+/* ---------- Video plays only while visible ---------- */
+const video = $('.video video');
+if (reducedMotion || !('IntersectionObserver' in window)) video.controls = true;
+else new IntersectionObserver(([e]) => { e.isIntersecting ? video.play().catch(() => {}) : video.pause(); }, { threshold: 0.25 }).observe(video);
+
+/* ---------- FAQ structured data (for Google) ---------- */
+const faqLd = document.createElement('script');
+faqLd.type = 'application/ld+json';
+faqLd.textContent = JSON.stringify({
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: $$('#faqList details').map(d => ({
+    '@type': 'Question', name: $('summary', d).textContent,
+    acceptedAnswer: { '@type': 'Answer', text: $('p', d).textContent },
+  })),
+});
+document.head.appendChild(faqLd);
+
+update();
+</script>
+</body>
+</html>
