@@ -58,7 +58,7 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
    - livraison gratuite et suivie sous 7 jours ;
    - satisfait ou remboursé 30 jours.
 
-   Les pages du dossier `pages/` disent déjà la même chose. Si tu changes une promesse sur la page, change-la aussi là. Dans la politique de confidentialité, ajoute une ligne indiquant que la ville du visiteur est estimée via son IP (service geojs.io) pour afficher la date de livraison.
+   Les pages du dossier `pages/` disent déjà la même chose. Si tu changes une promesse sur la page, change-la aussi là.
 
 8. **Mystery Box** : remplace « A cozy surprise » par une vraie description de ce qu'elle contient (obligatoire avant achat).
 
