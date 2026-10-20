@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,0..100&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
+<script defer src="https://cdn.whop.com/elements/amber/elements.js" data-whop-elements></script>
 <style>
   :root{
     --brown:#4a2418; --brown-2:#6b3a26; --burgundy:#7b2d2e; --cream:#faf6f1; --cream-2:#fcf6ed; --sand:#f1e7dc; --line:#e6d9cc;
@@ -244,6 +245,10 @@
   .toast__body small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
   .toast__body small .ok{color:var(--ok);font-weight:700}
   .toast__x{position:absolute;top:4px;right:4px;width:32px;height:32px;border:0;background:none;font-size:18px;line-height:1;color:var(--muted);cursor:pointer;border-radius:8px}
+  .checkout{width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);margin:auto;border:0;border-radius:var(--radius);padding:44px 16px 16px;background:#fff;color:var(--ink);box-shadow:0 24px 60px rgba(43,29,22,.3);overflow:auto;overscroll-behavior:contain}
+  .checkout::backdrop{background:rgba(43,29,22,.55)}
+  .checkout__x{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;background:none;font-size:24px;line-height:1;color:var(--muted);cursor:pointer;border-radius:10px}
+  .checkout__msg{padding:24px 8px;text-align:center;color:var(--muted)}
   .toast__demo{position:absolute;top:-9px;left:12px;background:#111;color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:999px}
 
   /* ---------- Scroll reveal ---------- */
@@ -507,12 +512,12 @@
   <div class="wrap">
     <img src="assets/coocoat-logo-white.svg" alt="Coocoat" width="593" height="166">
     <nav>
-      <a data-path="/pages/contact" href="#">Contact</a>
-      <a data-path="/policies/shipping-policy" href="#">Shipping Policy</a>
-      <a data-path="/policies/refund-policy" href="#">Refund Policy</a>
-      <a data-path="/policies/privacy-policy" href="#">Privacy Policy</a>
-      <a data-path="/policies/terms-of-service" href="#">Terms of Service</a>
-      <a data-path="/policies/legal-notice" href="#">Legal Notice</a>
+      <a data-page="contact" href="#">Contact</a>
+      <a data-page="shipping-policy" href="#">Shipping Policy</a>
+      <a data-page="refund-policy" href="#">Refund Policy</a>
+      <a data-page="privacy-policy" href="#">Privacy Policy</a>
+      <a data-page="terms-of-service" href="#">Terms of Service</a>
+      <a data-page="legal-notice" href="#">Legal Notice</a>
     </nav>
     <p>© 2026, Coocoat</p>
   </div>
@@ -523,6 +528,12 @@
   <div><b>Coocoat</b><span id="stickyColor">Beige</span> · <span class="js-total">€44.95</span></div>
   <a class="cta js-buy" href="#">Add to cart</a>
 </div>
+
+<dialog class="checkout" id="checkout" aria-label="Checkout">
+  <button class="checkout__x" id="checkoutClose" aria-label="Close checkout">×</button>
+  <div id="whopCheckout"></div>
+  <p class="checkout__msg" id="checkoutMsg" hidden></p>
+</dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
   <img id="toastImg" src="assets/thumbs/color-beige.jpg" alt="">
@@ -535,32 +546,39 @@
    SETTINGS — edit these to match your store (see LISEZ-MOI.md)
    ===================================================================== */
 const CONFIG = {
-  // Your Shopify store. All buy buttons and footer links point here.
-  // Only switch to 'https://coocoat.com' once that address opens your Shopify store.
-  store: 'https://toastyblanki.com',
+  // Footer pages (full URLs). A page left at null hides its link.
+  pages: {
+    'contact': null, 'shipping-policy': null, 'refund-policy': null,
+    'privacy-policy': null, 'terms-of-service': null, 'legal-notice': null,
+  },
 
-  // Must match the currency your Shopify checkout charges in.
+  // Must match the currency your Whop plans charge in.
   currency: '€',
   price: 44.95,
   // "Was" price shown crossed out. EU rule (Omnibus): it must be the lowest price
   // you charged in the 30 days before this offer started.
   comparePrice: 64.95,
 
-  // Shopify variant IDs for each color (Products → your product → click the variant → ID at the end of the URL)
+  // Whop plan IDs (plan_…). Each color can have its own plan, or all colors can share one:
+  // the chosen colors are always sent with the order (metadata "colors").
+  // Plans sold in quantity need "allow multiple quantity" enabled in Whop.
   variants: {
-    'Beige':        { id: '50445952745539', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
-    'Wine Red':     { id: '50445952778307', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
-    'Matcha Green': { id: '50445952811075', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
+    'Beige':        { plan: 'plan_XXXX_BEIGE', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
+    'Wine Red':     { plan: 'plan_XXXX_WINE_RED', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
+    'Matcha Green': { plan: 'plan_XXXX_MATCHA_GREEN', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
   },
   addons: {
-    powerBank:  { id: '50446597685315', price: 19.95 },
-    mysteryBox: { id: '43665657593923', price: 9.50 },
+    powerBank:  { plan: 'plan_XXXX_POWER_BANK', price: 19.95 },
+    mysteryBox: { plan: 'plan_XXXX_MYSTERY_BOX', price: 9.50 },
   },
 
-  // Duo bundle. In Shopify: Discounts → Create discount → Amount off products → code DUO70
-  // → Fixed amount = 2 × price − bundle price (19.90) → Applies to: the Coocoat product only
-  // → Minimum quantity of items: 2 → tick "Only apply discount once per order".
-  bundle: { price: 70, discountCode: 'DUO70' },
+  // Duo bundle: a Whop plan for 2 Coocoats at the bundle price (one-time, physical product).
+  // Ordering 2+ shawls uses one Duo plus single plans for the rest; colors go in the metadata.
+  bundle: { price: 70, plan: 'plan_XXXX_DUO' },
+
+  // Page the buyer comes back to after an off-site payment step (3-D Secure, bank page).
+  // null = this page. Must be https.
+  returnUrl: null,
 
   // Delivery promise used in the banner, the "Order now" button, the delivery date and the FAQ.
   deliveryDays: 7,
@@ -574,7 +592,7 @@ const CONFIG = {
   // Your REAL figures (e.g. from a review app like Judge.me). Set rating to null to hide the stars.
   rating: 4.8,
   reviewCount: 541,
-  // Real number of orders in the last 24h (Shopify Analytics). null hides the line.
+  // Real number of orders in the last 24h (Whop dashboard). null hides the line.
   ordersLast24h: null,
 
   // Purchase pop-up: REAL recent orders only. Show an initial unless the customer agreed to be named.
@@ -589,9 +607,6 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const money = n => CONFIG.currency + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '');
 const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
-const cartUrl = (lines, discount) =>
-  CONFIG.store + '/cart/' + lines.map(([id, q]) => id + ':' + q).join(',') +
-  (discount ? '?discount=' + encodeURIComponent(discount) : '');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const state = { color: 'Beige', qty: 1, duo: ['Beige', 'Wine Red'] };
@@ -626,7 +641,10 @@ const etaDate = (() => {
 $$('.js-eta').forEach(el => el.textContent = etaDate);
 
 /* ---------- Footer links ---------- */
-$$('[data-path]').forEach(a => a.href = CONFIG.store + a.dataset.path);
+$$('[data-page]').forEach(a => {
+  const url = CONFIG.pages[a.dataset.page];
+  if (url) a.href = url; else a.hidden = true;
+});
 
 /* ---------- Gallery ---------- */
 const mainImg = $('#mainImg');
@@ -662,9 +680,6 @@ function update() {
   // 2 or more shawls get the Duo price automatically (DUO70 applies once per order)
   const duo = state.qty >= 2;
   const total = CONFIG.price * state.qty - (duo ? duoSave : 0) + addonsTotal;
-  const href = cartUrl([[CONFIG.variants[state.color].id, state.qty], ...addons.map(a => [a.id, 1])],
-    duo ? CONFIG.bundle.discountCode : '');
-  $$('.js-buy').forEach(a => a.href = href);
   $$('.js-total').forEach(el => el.textContent = money(total));
   $('#duoHint').hidden = !duo;
   updateBundle(addons, addonsTotal);
@@ -690,11 +705,90 @@ $$('.pick').forEach(pick => {
   });
 });
 function updateBundle(addons = selectedAddons(), addonsTotal = addons.reduce((t, a) => t + a.price, 0)) {
-  const [a, b] = state.duo.map(c => CONFIG.variants[c].id);
-  const lines = a === b ? [[a, 2]] : [[a, 1], [b, 1]];
-  $('#bundleBtn').href = cartUrl([...lines, ...addons.map(x => [x.id, 1])], CONFIG.bundle.discountCode);
   $('#bundleTotal').textContent = money(CONFIG.bundle.price + addonsTotal);
 }
+
+/* ---------- Whop checkout (opens in a dialog on this page) ---------- */
+// Merges repeated plans into one line each
+function cartItems(lines) {
+  const q = new Map();
+  lines.forEach(([plan, n]) => q.set(plan, (q.get(plan) || 0) + n));
+  return [...q].map(([plan, quantity]) => ({ plan, quantity }));
+}
+// Main buy buttons: chosen color × qty (2+ shawls → one Duo + singles), plus add-ons
+function mainCart() {
+  const addons = $$('.upsell input:checked').map(i => i.dataset.addon);
+  const lines = state.qty >= 2
+    ? [[CONFIG.bundle.plan, 1], [CONFIG.variants[state.color].plan, state.qty - 2]]
+    : [[CONFIG.variants[state.color].plan, 1]];
+  return {
+    items: cartItems([...lines, ...addons.map(a => [CONFIG.addons[a].plan, 1])].filter(l => l[1] > 0)),
+    metadata: { colors: state.color + ' ×' + state.qty, addons: addons.join(', ') || 'none' },
+  };
+}
+// Duo bundle button: two picked colors, plus add-ons
+function duoCart() {
+  const addons = $$('.upsell input:checked').map(i => i.dataset.addon);
+  const [a, b] = state.duo;
+  return {
+    items: cartItems([[CONFIG.bundle.plan, 1], ...addons.map(x => [CONFIG.addons[x].plan, 1])]),
+    metadata: { colors: a === b ? a + ' ×2' : a + ' ×1, ' + b + ' ×1', addons: addons.join(', ') || 'none' },
+  };
+}
+
+const dialog = $('#checkout');
+let whopCheckout = null;
+function closeCheckout() {
+  if (whopCheckout) { try { whopCheckout.destroy(); } catch (e) {} whopCheckout = null; }
+  $('#whopCheckout').replaceChildren();
+}
+function checkoutMessage(text) {
+  $('#checkoutMsg').textContent = text;
+  $('#checkoutMsg').hidden = !text;
+}
+function openCheckout(cart) {
+  closeCheckout();
+  checkoutMessage('');
+  if (!dialog.open) dialog.showModal();
+  if (cart.items.some(i => !/^plan_[A-Za-z0-9]+$/.test(i.plan) || i.plan.includes('XXXX'))) {
+    checkoutMessage('Checkout is not set up yet: add your Whop plan IDs in CONFIG.');
+    return;
+  }
+  if (typeof window.WhopElements !== 'function') {
+    checkoutMessage('The secure checkout could not load. Please refresh the page and try again.');
+    return;
+  }
+  const back = CONFIG.returnUrl || (location.protocol === 'https:' ? location.origin + location.pathname : null);
+  try {
+    whopCheckout = window.WhopElements().checkout.create({
+      items: cart.items,
+      metadata: cart.metadata,
+      locale: 'en',
+      ...(back ? { returnUrl: back } : {}),
+    });
+    whopCheckout.create('checkout').mount('#whopCheckout');
+  } catch (e) {
+    console.error(e);
+    checkoutMessage('The secure checkout could not load. Please refresh the page and try again.');
+  }
+}
+$$('.js-buy').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openCheckout(mainCart()); }));
+$('#bundleBtn').addEventListener('click', e => { e.preventDefault(); openCheckout(duoCart()); });
+$('#checkoutClose').onclick = () => dialog.close();
+dialog.addEventListener('close', closeCheckout);
+dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+
+// Back from an off-site payment step (3-D Secure, bank page)
+(function checkoutReturn() {
+  const q = new URLSearchParams(location.search);
+  const status = q.get('status');
+  if (!q.get('payment') || !status) return;
+  history.replaceState(null, '', location.pathname + location.hash);
+  dialog.showModal();
+  checkoutMessage(status === 'succeeded'
+    ? '🎉 Thank you! Your order is confirmed. A confirmation email is on its way.'
+    : 'Your payment was not completed. You can try again whenever you are ready.');
+})();
 
 /* ---------- Offer countdown: everything sale-related disappears at the real end date ---------- */
 (function countdown() {
