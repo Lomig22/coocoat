@@ -18,7 +18,7 @@ Site statique : une page HTML, sans base de données ni serveur à installer. Il
 Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
 
 1. **Paiement Whop (les `plan`)**
-   Les boutons d'achat ouvrent le **checkout Whop dans une fenêtre, sur la page** (couleur, quantité, options et Duo compris). Il faut créer les plans dans Whop et coller leurs ID (`plan_…`) dans `CONFIG` :
+   Les boutons d'achat ouvrent le **checkout Whop dans une fenêtre, sur la page** (couleur, quantité, options et Duo compris). Les plans sont **déjà créés** dans Whop (entreprise Coocoat) et leurs ID sont dans `CONFIG` :
 
    | Dans `CONFIG` | Plan Whop à créer (paiement unique, produit physique, en EUR) |
    |---|---|
@@ -27,11 +27,10 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
    | `addons.powerBank.plan` | Power Bank – 19,95 € |
    | `addons.mysteryBox.plan` | Mystery Box – 9,50 € |
 
-   - Sur les plans Coocoat, autoriser l'**achat en plusieurs exemplaires** (quantité > 1).
-   - Activer la **collecte de l'adresse de livraison** sur chaque plan.
+   - Prix TTC (TVA incluse), paiement unique, adresse de livraison demandée.
+   - Whop n'accepte qu'**un exemplaire de chaque plan par commande**. La quantité est donc limitée à 3 (`maxQty`) : 2 = un Duo, 3 = un Duo + 1 châle. Si tu actives l'achat en plusieurs exemplaires sur les plans dans Whop, augmente `maxQty`.
    - Les couleurs choisies sont envoyées avec la commande (métadonnée `colors`, ex. `Beige ×1, Wine Red ×1`), et les options dans `addons`. Elles sont visibles sur le paiement dans Whop : c'est là qu'il faut les lire pour préparer l'envoi.
    - Avec 2 châles ou plus, la page met automatiquement 1 plan Duo + les châles en plus au prix normal. Il n'y a pas de code promo à créer.
-   - Tant que les ID factices (`plan_XXXX_…`) sont en place, la fenêtre affiche « Checkout is not set up yet ».
 
 2. **Devise**
    La page affiche des prix en **€**. Les plans Whop doivent donc être en euros, sinon les clients voient 44,95 € sur la page et paient 44,95 $.

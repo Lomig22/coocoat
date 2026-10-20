@@ -563,18 +563,21 @@ const CONFIG = {
   // the chosen colors are always sent with the order (metadata "colors").
   // Plans sold in quantity need "allow multiple quantity" enabled in Whop.
   variants: {
-    'Beige':        { plan: 'plan_XXXX_BEIGE', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
-    'Wine Red':     { plan: 'plan_XXXX_WINE_RED', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
-    'Matcha Green': { plan: 'plan_XXXX_MATCHA_GREEN', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
+    'Beige':        { plan: 'plan_29cBtbTy4tC0L', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
+    'Wine Red':     { plan: 'plan_LC6f0y9ERxZrl', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
+    'Matcha Green': { plan: 'plan_pge68dZ382oW4', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
   },
   addons: {
-    powerBank:  { plan: 'plan_XXXX_POWER_BANK', price: 19.95 },
-    mysteryBox: { plan: 'plan_XXXX_MYSTERY_BOX', price: 9.50 },
+    powerBank:  { plan: 'plan_oLEq7d2D7VQKn', price: 19.95 },
+    mysteryBox: { plan: 'plan_iuLvQsXOgzM2t', price: 9.50 },
   },
 
   // Duo bundle: a Whop plan for 2 Coocoats at the bundle price (one-time, physical product).
   // Ordering 2+ shawls uses one Duo plus single plans for the rest; colors go in the metadata.
-  bundle: { price: 70, plan: 'plan_XXXX_DUO' },
+  bundle: { price: 70, plan: 'plan_PNo5nMRHPFZSb' },
+  // Whop sells one unit of each plan per order, so 3 is the most the page can build
+  // (Duo + 1). Raise it only once "multiple quantity" is enabled on the Whop plans.
+  maxQty: 3,
 
   // Page the buyer comes back to after an off-site payment step (3-D Secure, bank page).
   // null = this page. Must be https.
@@ -667,7 +670,7 @@ $$('.swatch').forEach(s => s.addEventListener('click', () => {
   show(v.img, v.alt);
   update();
 }));
-$('#plus').onclick = () => { state.qty = Math.min(10, state.qty + 1); update(); };
+$('#plus').onclick = () => { state.qty = Math.min(CONFIG.maxQty, state.qty + 1); update(); };
 $('#minus').onclick = () => { state.qty = Math.max(1, state.qty - 1); update(); };
 $$('.upsell input').forEach(i => i.addEventListener('change', update));
 
