@@ -121,6 +121,7 @@
   .buy{display:flex;gap:10px}
   .qty{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;background:#fff}
   .qty button{width:40px;height:100%;border:0;background:none;font-size:20px;cursor:pointer;color:var(--brown)}
+  .qty button:disabled{opacity:.3;cursor:default}
   .qty output{min-width:24px;text-align:center;font-weight:700}
   .cta{position:relative;overflow:hidden;flex:1;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--brown);color:#fff;text-decoration:none;font-weight:700;font-size:17px;padding:17px 22px;border-radius:12px;border:0;cursor:pointer;transition:background .2s,transform .1s;text-align:center}
   .cta:hover{background:var(--brown-2)}
@@ -546,10 +547,11 @@
    SETTINGS — edit these to match your store (see LISEZ-MOI.md)
    ===================================================================== */
 const CONFIG = {
-  // Footer pages (full URLs). A page left at null hides its link.
+  // Footer pages (in the pages/ folder). A page set to null hides its link.
   pages: {
-    'contact': null, 'shipping-policy': null, 'refund-policy': null,
-    'privacy-policy': null, 'terms-of-service': null, 'legal-notice': null,
+    'contact': 'pages/contact.html', 'shipping-policy': 'pages/shipping-policy.html',
+    'refund-policy': 'pages/refund-policy.html', 'privacy-policy': 'pages/privacy-policy.html',
+    'terms-of-service': 'pages/terms-of-service.html', 'legal-notice': 'pages/legal-notice.html',
   },
 
   // Must match the currency your Whop plans charge in.
@@ -678,6 +680,8 @@ const selectedAddons = () => $$('.upsell input:checked').map(i => CONFIG.addons[
 
 function update() {
   $('#qty').textContent = state.qty;
+  $('#plus').disabled = state.qty >= CONFIG.maxQty;
+  $('#minus').disabled = state.qty <= 1;
   const addons = selectedAddons();
   const addonsTotal = addons.reduce((t, a) => t + a.price, 0);
   // 2 or more shawls get the Duo price automatically (DUO70 applies once per order)

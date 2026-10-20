@@ -35,8 +35,8 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
 2. **Devise**
    La page affiche des prix en **€**. Les plans Whop doivent donc être en euros, sinon les clients voient 44,95 € sur la page et paient 44,95 $.
 
-3. **Pages du pied de page (`pages`)**
-   Contact, livraison, remboursement, confidentialité, CGV, mentions légales : mets l'URL complète de chaque page. Un lien laissé à `null` est masqué. Les **Mentions légales** sont obligatoires en France.
+3. **Pages du pied de page (dossier `pages/`)**
+   Contact, livraison, remboursement, confidentialité, CGV et mentions légales sont rédigées et reliées au pied de page. Il reste à remplir les passages **surlignés en jaune** (`<mark>[…]</mark>`) avec les infos de ta société : raison sociale, adresse, SIRET, TVA, responsable de la publication, hébergeur et médiateur de la consommation. Ces infos sont obligatoires en France. L'email de contact est `contact@coocoat.com` : remplace-le partout s'il est différent.
 
 4. **Fin de l'offre (`saleEnds`)**
    Mets la vraie date de fin de l'offre −30 %. À cette date, le compte à rebours, les badges « SAVE 30% » et le prix barré disparaissent tout seuls. 
@@ -58,7 +58,7 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
    - livraison gratuite et suivie sous 7 jours ;
    - satisfait ou remboursé 30 jours.
 
-   Tes politiques (et les conditions affichées sur Whop) doivent dire la même chose. Dans la politique de confidentialité, ajoute une ligne indiquant que la ville du visiteur est estimée via son IP (service geojs.io) pour afficher la date de livraison.
+   Les pages du dossier `pages/` disent déjà la même chose. Si tu changes une promesse sur la page, change-la aussi là. Dans la politique de confidentialité, ajoute une ligne indiquant que la ville du visiteur est estimée via son IP (service geojs.io) pour afficher la date de livraison.
 
 8. **Mystery Box** : remplace « A cozy surprise » par une vraie description de ce qu'elle contient (obligatoire avant achat).
 
