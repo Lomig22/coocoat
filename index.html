@@ -30,6 +30,22 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+// GDPR: nothing is sent to Meta until the visitor accepts the cookie banner
+(function () { var c; try { c = localStorage.getItem('cookie-consent'); } catch (e) {} fbq('consent', c === 'granted' ? 'grant' : 'revoke'); })();
+fbq('init', '1854325102651672');
+fbq('track', 'PageView');
+</script>
+<!-- End Meta Pixel Code -->
 <style>
   :root{
     --brown:#4a2418; --brown-2:#6b3a26; --burgundy:#7b2d2e; --cream:#faf6f1; --cream-2:#fcf6ed; --sand:#f1e7dc; --line:#e6d9cc;
@@ -553,7 +569,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </div>
 
 <div class="consent" id="consent" role="region" aria-label="Cookies" hidden>
-  <p>We use cookies to measure our ads (TikTok). Accept? See our <a href="pages/privacy-policy.html">privacy policy</a>.</p>
+  <p>We use cookies to measure our ads (TikTok, Meta). Accept? See our <a href="pages/privacy-policy.html">privacy policy</a>.</p>
   <div><button type="button" id="consentNo">Refuse</button><button type="button" class="yes" id="consentYes">Accept</button></div>
 </div>
 
@@ -787,8 +803,18 @@ function duoCart() {
 }
 
 /* ---------- TikTok pixel events + cookie consent ---------- */
+// Same event names on TikTok and Meta (Meta calls the purchase "Purchase"); the id dedupes repeats
+const META_EVENTS = { CompletePayment: 'Purchase' };
 const track = (event, data, id) => {
   try { window.ttq && ttq.track(event, { currency: 'EUR', content_type: 'product', ...data }, id ? { event_id: id } : undefined); } catch (e) {}
+  try {
+    window.fbq && fbq('track', META_EVENTS[event] || event, {
+      currency: 'EUR', content_type: 'product', value: data.value,
+      content_ids: data.contents.map(c => c.content_id),
+      contents: data.contents.map(c => ({ id: c.content_id, quantity: c.quantity })),
+      num_items: data.contents.reduce((t, c) => t + c.quantity, 0),
+    }, id ? { eventID: id } : undefined);
+  } catch (e) {}
 };
 const trackData = cart => ({ value: Math.round(cart.value * 100) / 100, contents: cart.contents });
 track('ViewContent', { value: CONFIG.price, contents: [{ content_id: CONFIG.variants[state.color].plan, content_name: 'Coocoat Heated Shawl', quantity: 1, price: CONFIG.price }] });
@@ -800,6 +826,7 @@ track('ViewContent', { value: CONFIG.price, contents: [{ content_id: CONFIG.vari
   const choose = ok => {
     try { localStorage.setItem('cookie-consent', ok ? 'granted' : 'denied'); } catch (e) {}
     if (window.ttq) ok ? ttq.grantConsent() : ttq.revokeConsent();
+    if (window.fbq) fbq('consent', ok ? 'grant' : 'revoke');
     box.hidden = true;
   };
   $('#consentYes').onclick = () => choose(true);
