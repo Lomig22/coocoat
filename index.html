@@ -561,22 +561,31 @@ const CONFIG = {
   // you charged in the 30 days before this offer started.
   comparePrice: 64.95,
 
-  // Whop plan IDs (plan_…). Each color can have its own plan, or all colors can share one:
-  // the chosen colors are always sent with the order (metadata "colors").
-  // Plans sold in quantity need "allow multiple quantity" enabled in Whop.
+  // Whop plan IDs (plan_…): one Whop product per color, so the color shows on the order.
+  // The chosen colors are also sent with the order (metadata "colors").
   variants: {
-    'Beige':        { plan: 'plan_29cBtbTy4tC0L', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
-    'Wine Red':     { plan: 'plan_LC6f0y9ERxZrl', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
-    'Matcha Green': { plan: 'plan_pge68dZ382oW4', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
+    'Beige':        { plan: 'plan_J2LAvs0aSLQsE', img: 'assets/color-beige.jpg',        thumb: 'assets/thumbs/color-beige.jpg',        hex: '#d4a77f', alt: 'Coocoat heated shawl in Beige' },
+    'Wine Red':     { plan: 'plan_Sy1IABMe629eH', img: 'assets/color-wine-red.jpg',     thumb: 'assets/thumbs/color-wine-red.jpg',     hex: '#7a1f2b', alt: 'Coocoat heated shawl in Wine Red' },
+    'Matcha Green': { plan: 'plan_Ku6IaSbEuUYdH', img: 'assets/color-matcha-green.jpg', thumb: 'assets/thumbs/color-matcha-green.jpg', hex: '#9aaa78', alt: 'Coocoat heated shawl in Matcha Green' },
   },
   addons: {
     powerBank:  { plan: 'plan_oLEq7d2D7VQKn', price: 19.95 },
     mysteryBox: { plan: 'plan_iuLvQsXOgzM2t', price: 9.50 },
   },
 
-  // Duo bundle: a Whop plan for 2 Coocoats at the bundle price (one-time, physical product).
-  // Ordering 2+ shawls uses one Duo plus single plans for the rest; colors go in the metadata.
-  bundle: { price: 70, plan: 'plan_PNo5nMRHPFZSb' },
+  // Duo bundle: one Whop product per color pair ("Coocoat Duo – Beige + Wine Red"), 2 shawls at the bundle price.
+  // Ordering 2+ shawls uses one Duo plus single plans for the rest. Pairs work in either order.
+  bundle: {
+    price: 70,
+    plans: {
+      'Beige|Beige':               'plan_FxcMaOL1G2pyZ',
+      'Beige|Wine Red':            'plan_ARMBkn2XqldQx',
+      'Beige|Matcha Green':        'plan_iwdINMgfKGQ5M',
+      'Wine Red|Wine Red':         'plan_hoUAIXkM9153P',
+      'Wine Red|Matcha Green':     'plan_dnfdFqEusC42q',
+      'Matcha Green|Matcha Green': 'plan_0eSBAuQvH0LdY',
+    },
+  },
   // Whop sells one unit of each plan per order, so 3 is the most the page can build
   // (Duo + 1). Raise it only once "multiple quantity" is enabled on the Whop plans.
   maxQty: 3,
@@ -716,6 +725,7 @@ function updateBundle(addons = selectedAddons(), addonsTotal = addons.reduce((t,
 }
 
 /* ---------- Whop checkout (opens in a dialog on this page) ---------- */
+const duoPlan = (a, b) => CONFIG.bundle.plans[a + '|' + b] || CONFIG.bundle.plans[b + '|' + a];
 // Merges repeated plans into one line each
 function cartItems(lines) {
   const q = new Map();
@@ -726,7 +736,7 @@ function cartItems(lines) {
 function mainCart() {
   const addons = $$('.upsell input:checked').map(i => i.dataset.addon);
   const lines = state.qty >= 2
-    ? [[CONFIG.bundle.plan, 1], [CONFIG.variants[state.color].plan, state.qty - 2]]
+    ? [[duoPlan(state.color, state.color), 1], [CONFIG.variants[state.color].plan, state.qty - 2]]
     : [[CONFIG.variants[state.color].plan, 1]];
   return {
     items: cartItems([...lines, ...addons.map(a => [CONFIG.addons[a].plan, 1])].filter(l => l[1] > 0)),
@@ -738,7 +748,7 @@ function duoCart() {
   const addons = $$('.upsell input:checked').map(i => i.dataset.addon);
   const [a, b] = state.duo;
   return {
-    items: cartItems([[CONFIG.bundle.plan, 1], ...addons.map(x => [CONFIG.addons[x].plan, 1])]),
+    items: cartItems([[duoPlan(a, b), 1], ...addons.map(x => [CONFIG.addons[x].plan, 1])]),
     metadata: { colors: a === b ? a + ' ×2' : a + ' ×1, ' + b + ' ×1', addons: addons.join(', ') || 'none' },
   };
 }
@@ -757,7 +767,7 @@ function openCheckout(cart) {
   closeCheckout();
   checkoutMessage('');
   if (!dialog.open) dialog.showModal();
-  if (cart.items.some(i => !/^plan_[A-Za-z0-9]+$/.test(i.plan) || i.plan.includes('XXXX'))) {
+  if (cart.items.some(i => !/^plan_[A-Za-z0-9]+$/.test(i.plan || '') || i.plan.includes('XXXX'))) {
     checkoutMessage('Checkout is not set up yet: add your Whop plan IDs in CONFIG.');
     return;
   }

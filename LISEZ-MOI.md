@@ -20,16 +20,18 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
 1. **Paiement Whop (les `plan`)**
    Les boutons d'achat ouvrent le **checkout Whop dans une fenêtre, sur la page** (couleur, quantité, options et Duo compris). Les plans sont **déjà créés** dans Whop (entreprise Coocoat) et leurs ID sont dans `CONFIG` :
 
-   | Dans `CONFIG` | Plan Whop à créer (paiement unique, produit physique, en EUR) |
+   | Dans `CONFIG` | Produits Whop (prix TTC, paiement unique, adresse de livraison demandée) |
    |---|---|
-   | `variants['Beige'].plan`, `['Wine Red'].plan`, `['Matcha Green'].plan` | Coocoat – 44,95 € (un plan par couleur, ou le même ID pour les trois) |
-   | `bundle.plan` | Coocoat Duo (2 châles) – 70 € |
-   | `addons.powerBank.plan` | Power Bank – 19,95 € |
-   | `addons.mysteryBox.plan` | Mystery Box – 9,50 € |
+   | `variants[…].plan` | « Coocoat – Beige », « Coocoat – Wine Red », « Coocoat – Matcha Green » : 44,95 € |
+   | `bundle.plans` | Un Duo par paire de couleurs (6), ex. « Coocoat Duo – Beige + Wine Red » : 70 € |
+   | `addons.powerBank.plan` | Coocoat Power Bank : 19,95 € |
+   | `addons.mysteryBox.plan` | Coocoat Mystery Box : 9,50 € |
 
+   La couleur fait partie du nom du produit : elle s'affiche dans le checkout du client et sur chaque vente dans Whop.
+   **Ajouter une couleur :** créer dans Whop le produit « Coocoat – Couleur » et les Duo de cette couleur avec chacune des autres, puis les ajouter dans `variants` et `bundle.plans`, et ajouter la pastille (`swatch`) dans la page.
    - Prix TTC (TVA incluse), paiement unique, adresse de livraison demandée.
    - Whop n'accepte qu'**un exemplaire de chaque plan par commande**. La quantité est donc limitée à 3 (`maxQty`) : 2 = un Duo, 3 = un Duo + 1 châle. Si tu actives l'achat en plusieurs exemplaires sur les plans dans Whop, augmente `maxQty`.
-   - Les couleurs choisies sont envoyées avec la commande (métadonnée `colors`, ex. `Beige ×1, Wine Red ×1`), et les options dans `addons`. Elles sont visibles sur le paiement dans Whop : c'est là qu'il faut les lire pour préparer l'envoi.
+   - Les couleurs et options sont aussi envoyées dans les métadonnées du paiement (`colors`, `addons`).
    - Avec 2 châles ou plus, la page met automatiquement 1 plan Duo + les châles en plus au prix normal. Il n'y a pas de code promo à créer.
 
 2. **Devise**
@@ -83,6 +85,8 @@ Même principe : importer le dossier, puis dans la zone DNS mettre **A** `@` →
 ## 3. Et Whop ?
 
 Le paiement se fait dans la page, il n'y a pas de boutique séparée à brancher sur le domaine. Renomme simplement l'entreprise et les produits en « Coocoat » dans Whop : c'est le nom que le client voit au moment du paiement.
+
+**Apple Pay / Google Pay :** le fichier `vercel.json` sert le fichier de vérification Apple Pay de Whop sur `/.well-known/apple-developer-merchantid-domain-association`. Le domaine `www.coocoat.com` est déclaré dans Whop. Si tu changes de domaine, il faut le déclarer aussi dans Whop (*Paramètres de checkout → Apple Pay*).
 
 Après une étape de validation bancaire (3-D Secure), le client revient sur la page, qui affiche la confirmation ou l'échec. Pour revenir sur une autre page, mets son adresse dans `returnUrl` (en https).
 
