@@ -335,13 +335,6 @@ fbq('track', 'PageView');
     .bar__item::after{display:none}
   }
 </style>
-<!-- Whop Pixel -->
-<script>
-!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");
-whop.setScope("biz_lSIg3Czl1HENw1");
-whop.track("page");
-</script>
-<!-- End Whop Pixel -->
 </head>
 <body>
 
@@ -880,6 +873,19 @@ const track = (event, data, id) => {
 const trackData = cart => ({ value: Math.round(cart.value * 100) / 100, contents: cart.contents });
 // Meta AddToCart for the clicked product, with a new event id on every click
 const eventId = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2);
+// Meta Purchase: sent from the page (Whop does not send it for an embedded checkout).
+// Built when the checkout opens, from the cart the buyer pays for; one event per Whop payment ID.
+const metaPurchaseData = cart => ({
+  value: Math.round(cart.value * 100) / 100, currency: CONFIG.currencyCode,
+  content_ids: cart.items.map(i => i.plan), content_name: cart.contents[0].content_name, content_type: 'product',
+  num_items: cart.contents.reduce((t, c) => t + c.quantity, 0),
+});
+function metaPurchase(data, paymentId) {
+  if (!data || !paymentId) return;
+  const key = 'meta-purchase-' + paymentId;
+  try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) {}
+  try { window.fbq && fbq('track', 'Purchase', data, { eventID: paymentId }); } catch (e) {}
+}
 function addToCart(cart) {
   const product = cart.contents[0];
   try {
@@ -932,13 +938,18 @@ function openCheckout(cart) {
   track('InitiateCheckout', trackData(cart));
   // kept for the purchase event if the buyer comes back from a 3-D Secure page
   try { sessionStorage.setItem('last-cart', JSON.stringify(trackData(cart))); } catch (e) {}
+  const purchase = metaPurchaseData(cart);
+  try { sessionStorage.setItem('last-meta-purchase', JSON.stringify(purchase)); } catch (e) {}
   try {
     whopCheckout = window.WhopElements().checkout.create({
       items: cart.items,
       metadata: cart.metadata,
       locale: 'en',
       ...(back ? { returnUrl: back } : {}),
-      onComplete: r => { if (r && r.result === 'payment') track('CompletePayment', trackData(cart), r.paymentId); },
+      onComplete: r => {
+        if (r && r.result === 'payment') track('CompletePayment', trackData(cart), r.paymentId);
+        if (r && r.result === 'payment' && r.paymentId) metaPurchase(purchase, r.paymentId);
+      },
     });
     whopCheckout.create('checkout').mount('#whopCheckout');
   } catch (e) {
@@ -963,6 +974,9 @@ dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close();
     try { cart = JSON.parse(sessionStorage.getItem('last-cart')); sessionStorage.removeItem('last-cart'); } catch (e) {}
     // same event_id as onComplete, so TikTok counts the purchase once
     if (cart) track('CompletePayment', cart, q.get('payment'));
+    let purchase = null;
+    try { purchase = JSON.parse(sessionStorage.getItem('last-meta-purchase')); sessionStorage.removeItem('last-meta-purchase'); } catch (e) {}
+    metaPurchase(purchase, q.get('payment'));
   }
   dialog.showModal();
   checkoutMessage(status === 'succeeded'
