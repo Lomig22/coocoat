@@ -34,8 +34,11 @@ Ouvre `index.html`, descends jusqu'à `const CONFIG = {`.
    - Les couleurs et options sont aussi envoyées dans les métadonnées du paiement (`colors`, `addons`).
    - Avec 2 châles ou plus, la page met automatiquement 1 plan Duo + les châles en plus au prix normal. Il n'y a pas de code promo à créer.
 
-2. **Devise**
-   La page affiche des prix en **€**. Les plans Whop doivent donc être en euros, sinon les clients voient 44,95 € sur la page et paient 44,95 $.
+2. **Devises (`markets`)**
+   La page affiche les prix en **€**, sauf pour les visiteurs du **Royaume-Uni** (et Jersey, Guernesey, île de Man), détectés par leur adresse IP, qui voient des prix fixes en **£** : 39,95 £ le châle (prix barré 57,95 £), 59,95 £ le Duo, 16,95 £ la Power Bank et 7,95 £ la Mystery Box. Ces prix ont leurs propres produits Whop en livres, donc la page et le checkout affichent le même montant.
+   - Pour changer un prix en £ : le modifier dans Whop **et** dans `CONFIG.markets.GBP`.
+   - Pour ajouter un pays avec sa devise : créer les produits Whop dans cette devise, puis ajouter un bloc dans `markets` sur le modèle de `GBP`.
+   - Hors zone euro et Royaume-Uni (ex. États-Unis), la page affiche les prix en €, mais Whop peut afficher le checkout dans la devise locale du client, au taux du jour (option « adaptive pricing », activée sur les plans en €).
 
 3. **Pages du pied de page (dossier `pages/`)**
    Contact, livraison, remboursement, confidentialité, CGV et mentions légales sont rédigées et reliées au pied de page. Il reste à remplir les passages **surlignés en jaune** (`<mark>[…]</mark>`) avec les infos de ta société : raison sociale, adresse, SIRET, TVA, responsable de la publication, hébergeur et médiateur de la consommation. Ces infos sont obligatoires en France. L'email de contact est `contact@coocoat.com` : remplace-le partout s'il est différent.

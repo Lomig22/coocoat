@@ -637,6 +637,33 @@ const CONFIG = {
       'Matcha Green|Matcha Green': 'plan_0eSBAuQvH0LdY',
     },
   },
+  // Local prices by visitor country (from their IP). Each market has its own Whop plans in its currency,
+  // so the page and the checkout show exactly the same amount. Every other country uses the € prices above.
+  markets: {
+    GBP: {
+      countries: ['GB', 'JE', 'GG', 'IM'],
+      currency: '£', currencyCode: 'GBP',
+      price: 39.95, comparePrice: 57.95, bundlePrice: 59.95,
+      variants: {
+        'Beige':         'plan_tcbhX80J7eukD',
+        'Wine Red':      'plan_UDNAPEGiWBHT9',
+        'Matcha Green':  'plan_xbl15AAH0xj1f',
+      },
+      bundlePlans: {
+        'Beige|Beige':               'plan_Xg1203wIkfQDj',
+        'Beige|Wine Red':            'plan_PmGUg5yuSTd6J',
+        'Beige|Matcha Green':        'plan_7r8NjGNIktdCp',
+        'Wine Red|Wine Red':         'plan_Yp0OV0WeLLQJt',
+        'Wine Red|Matcha Green':     'plan_p8HQCp7QQNEYT',
+        'Matcha Green|Matcha Green': 'plan_OWB99XDeDLNr5',
+      },
+      addons: {
+        powerBank:  { plan: 'plan_pd9d1YgvDBAzd', price: 16.95 },
+        mysteryBox: { plan: 'plan_VFu3i4J79t137', price: 7.95 },
+      },
+    },
+  },
+
   // Whop sells one unit of each plan per order, so 3 is the most the page can build
   // (Duo + 1). Raise it only once "multiple quantity" is enabled on the Whop plans.
   maxQty: 3,
@@ -647,9 +674,8 @@ const CONFIG = {
 
   // Delivery promise used in the banner, the "Order now" button, the delivery date and the FAQ.
   deliveryDays: 7,
-  // Countries (ISO codes) where free delivery within deliveryDays is true.
-  // The pop-up only names the visitor's city when they are in one of these.
-  shipsTo: ['FR'],
+  // Countries (ISO codes) where the "Free tracked delivery to <city>" message is shown. null = every country.
+  shipsTo: null,
 
   // Real end date of the offer. After it, the banner offer, "SAVE x%" badges and crossed-out price disappear.
   saleEnds: '2026-11-01T23:59:00+01:00',
@@ -675,17 +701,42 @@ const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const state = { color: 'Beige', qty: 1, duo: ['Beige', 'Wine Red'] };
-const duoSave = 2 * CONFIG.price - CONFIG.bundle.price;
+let duoSave;
+
+// Visitor location from IP: used for local prices and the delivery message (null if unknown after 3 s)
+const geo = (() => {
+  const ctl = new AbortController();
+  setTimeout(() => ctl.abort(), 3000);
+  return fetch('https://get.geojs.io/v1/ip/geo.json', { signal: ctl.signal })
+    .then(r => r.ok ? r.json() : null).catch(() => null);
+})();
 
 /* ---------- Prices, percentages, rating, delivery days (all from CONFIG) ---------- */
-const PRICES = {
-  price: CONFIG.price, compare: CONFIG.comparePrice, bundle: CONFIG.bundle.price,
-  bundleCompare: 2 * CONFIG.price, bundleSave: duoSave,
-  powerBank: CONFIG.addons.powerBank.price, mysteryBox: CONFIG.addons.mysteryBox.price,
-};
-$$('[data-money]').forEach(el => el.textContent = money(PRICES[el.dataset.money]));
-const pct = Math.floor((1 - CONFIG.price / CONFIG.comparePrice) * 100);
-$$('[data-pct]').forEach(el => el.textContent = pct);
+function renderPrices() {
+  duoSave = 2 * CONFIG.price - CONFIG.bundle.price;
+  const PRICES = {
+    price: CONFIG.price, compare: CONFIG.comparePrice, bundle: CONFIG.bundle.price,
+    bundleCompare: 2 * CONFIG.price, bundleSave: duoSave,
+    powerBank: CONFIG.addons.powerBank.price, mysteryBox: CONFIG.addons.mysteryBox.price,
+  };
+  $$('[data-money]').forEach(el => el.textContent = money(PRICES[el.dataset.money]));
+  const pct = Math.floor((1 - CONFIG.price / CONFIG.comparePrice) * 100);
+  $$('[data-pct]').forEach(el => el.textContent = pct);
+}
+renderPrices();
+// Switch prices and Whop plans to the visitor's market, if they are in one
+const market = geo.then(g => {
+  const country = g && g.country_code;
+  const m = Object.values(CONFIG.markets || {}).find(m => m.countries.includes(country));
+  if (!m) return;
+  Object.assign(CONFIG, { currency: m.currency, currencyCode: m.currencyCode, price: m.price, comparePrice: m.comparePrice });
+  CONFIG.bundle.price = m.bundlePrice;
+  CONFIG.bundle.plans = m.bundlePlans;
+  Object.entries(m.variants).forEach(([color, plan]) => CONFIG.variants[color].plan = plan);
+  Object.entries(m.addons).forEach(([k, a]) => Object.assign(CONFIG.addons[k], a));
+  renderPrices();
+  update();
+});
 $$('[data-days]').forEach(el => el.textContent = CONFIG.deliveryDays);
 if (CONFIG.rating == null) $$('.js-rating').forEach(el => el.remove());
 else {
@@ -837,7 +888,7 @@ function addToCart(cart) {
     }, { eventID: eventId() });
   } catch (e) {}
 }
-track('ViewContent', { value: CONFIG.price, contents: [{ content_id: CONFIG.variants[state.color].plan, content_name: 'Coocoat Heated Shawl', quantity: 1, price: CONFIG.price }] });
+market.then(() => track('ViewContent', { value: CONFIG.price, contents: [{ content_id: CONFIG.variants[state.color].plan, content_name: 'Coocoat Heated Shawl', quantity: 1, price: CONFIG.price }] }));
 (function consentBanner() {
   const box = $('#consent');
   let saved = null;
@@ -1003,13 +1054,9 @@ checkSticky();
     });
   }
 
-  // Visitor location from IP → personal delivery estimate (only where it is true)
-  const ctl = new AbortController();
-  setTimeout(() => ctl.abort(), 3000);
-  fetch('https://get.geojs.io/v1/ip/geo.json', { signal: ctl.signal })
-    .then(r => r.ok ? r.json() : null).catch(() => null)
-    .then(g => {
-      const city = g && g.city && (CONFIG.shipsTo || []).includes(g.country_code) ? g.city : null;
+  // Visitor location from IP → personal delivery estimate
+  geo.then(g => {
+      const city = g && g.city && (!CONFIG.shipsTo || CONFIG.shipsTo.includes(g.country_code)) ? g.city : null;
       if (city) $('#etaText').innerHTML = `Free tracked delivery to <b>${esc(city)}</b> — arrives by <b>${etaDate}</b>`;
 
       // Orders near the visitor first, then newest first
