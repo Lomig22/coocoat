@@ -720,10 +720,11 @@ function renderPrices() {
     powerBank: CONFIG.addons.powerBank.price, mysteryBox: CONFIG.addons.mysteryBox.price,
   };
   $$('[data-money]').forEach(el => el.textContent = money(PRICES[el.dataset.money]));
-  const pct = Math.floor((1 - CONFIG.price / CONFIG.comparePrice) * 100);
-  $$('[data-pct]').forEach(el => el.textContent = pct);
 }
 renderPrices();
+// The "SAVE x%" badge comes from the € prices and stays the same in every market
+const pct = Math.floor((1 - CONFIG.price / CONFIG.comparePrice) * 100);
+$$('[data-pct]').forEach(el => el.textContent = pct);
 // Switch prices and Whop plans to the visitor's market, if they are in one
 const market = geo.then(g => {
   const country = g && g.country_code;
