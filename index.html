@@ -335,6 +335,13 @@ fbq('track', 'PageView');
     .bar__item::after{display:none}
   }
 </style>
+<!-- Whop Pixel -->
+<script>
+!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");
+whop.setScope("biz_lSIg3Czl1HENw1");
+whop.track("page");
+</script>
+<!-- End Whop Pixel -->
 </head>
 <body>
 
@@ -599,6 +606,7 @@ const CONFIG = {
 
   // Must match the currency your Whop plans charge in.
   currency: '€',
+  currencyCode: 'EUR',
   price: 44.95,
   // "Was" price shown crossed out. EU rule (Omnibus): it must be the lowest price
   // you charged in the 30 days before this offer started.
@@ -803,13 +811,14 @@ function duoCart() {
 }
 
 /* ---------- TikTok pixel events + cookie consent ---------- */
-// Same event names on TikTok and Meta (Meta calls the purchase "Purchase"); the id dedupes repeats
-const META_EVENTS = { CompletePayment: 'Purchase' };
+// Same event names on TikTok and Meta; the id dedupes repeats.
+// Meta's Purchase is sent by Whop itself, so the purchase only goes to TikTok from here.
 const track = (event, data, id) => {
-  try { window.ttq && ttq.track(event, { currency: 'EUR', content_type: 'product', ...data }, id ? { event_id: id } : undefined); } catch (e) {}
+  try { window.ttq && ttq.track(event, { currency: CONFIG.currencyCode, content_type: 'product', ...data }, id ? { event_id: id } : undefined); } catch (e) {}
+  if (event === 'CompletePayment') return;
   try {
-    window.fbq && fbq('track', META_EVENTS[event] || event, {
-      currency: 'EUR', content_type: 'product', value: data.value,
+    window.fbq && fbq('track', event, {
+      currency: CONFIG.currencyCode, content_type: 'product', value: data.value,
       content_ids: data.contents.map(c => c.content_id),
       contents: data.contents.map(c => ({ id: c.content_id, quantity: c.quantity })),
       num_items: data.contents.reduce((t, c) => t + c.quantity, 0),
@@ -817,6 +826,17 @@ const track = (event, data, id) => {
   } catch (e) {}
 };
 const trackData = cart => ({ value: Math.round(cart.value * 100) / 100, contents: cart.contents });
+// Meta AddToCart for the clicked product, with a new event id on every click
+const eventId = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2);
+function addToCart(cart) {
+  const product = cart.contents[0];
+  try {
+    window.fbq && fbq('track', 'AddToCart', {
+      value: Math.round(cart.value * 100) / 100, currency: CONFIG.currencyCode,
+      content_ids: [product.content_id], content_name: product.content_name, content_type: 'product',
+    }, { eventID: eventId() });
+  } catch (e) {}
+}
 track('ViewContent', { value: CONFIG.price, contents: [{ content_id: CONFIG.variants[state.color].plan, content_name: 'Coocoat Heated Shawl', quantity: 1, price: CONFIG.price }] });
 (function consentBanner() {
   const box = $('#consent');
@@ -874,8 +894,8 @@ function openCheckout(cart) {
     checkoutMessage('The secure checkout could not load. Please refresh the page and try again.');
   }
 }
-$$('.js-buy').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openCheckout(mainCart()); }));
-$('#bundleBtn').addEventListener('click', e => { e.preventDefault(); openCheckout(duoCart()); });
+$$('.js-buy').forEach(a => a.addEventListener('click', e => { e.preventDefault(); const c = mainCart(); addToCart(c); openCheckout(c); }));
+$('#bundleBtn').addEventListener('click', e => { e.preventDefault(); const c = duoCart(); addToCart(c); openCheckout(c); });
 $('#checkoutClose').onclick = () => dialog.close();
 dialog.addEventListener('close', closeCheckout);
 dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
